@@ -1,0 +1,80 @@
+name: Learning workflow checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backend-and-core:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.12.23"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: uv sync --directory server --locked
+      - run: uv run --directory server ruff check app tests
+      - run: uv run --directory server pytest -q
+      - name: Install verified Swift toolchain
+        env:
+          LINGUAMATE_TOOLCHAIN_ROOT: ${{ runner.temp }}/swift-toolchains
+        run: bash scripts/setup-swift-linux.sh
+      - name: Swift tests and HTTP client contract
+        env:
+          LINGUAMATE_TOOLCHAIN_ROOT: ${{ runner.temp }}/swift-toolchains
+        run: bash scripts/test-contract.sh
+  ios:
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate Xcode project
+        run: |
+          git clone --depth 1 --branch 2.44.1 https://github.com/yonaskolb/XcodeGen.git "$RUNNER_TEMP/XcodeGen"
+          swift build --package-path "$RUNNER_TEMP/XcodeGen" --product xcodegen --jobs 4
+          "$RUNNER_TEMP/XcodeGen/.build/debug/xcodegen" generate --spec ios/project.yml
+      - name: Select an available iPhone simulator
+        run: |
+          xcrun simctl list devices available --json > "$RUNNER_TEMP/simulators.json"
+          python3 - <<'PY' >> "$GITHUB_ENV"
+          import json, os
+          from pathlib import Path
+          data = json.loads((Path(os.environ['RUNNER_TEMP']) / 'simulators.json').read_text())
+          devices = [device for runtime, group in data['devices'].items() if 'iOS' in runtime
+                     for device in group if device.get('isAvailable') and 'iPhone' in device['name']]
+          if not devices:
+              raise SystemExit('No iPhone simulator is installed on this runner')
+          print('LINGUAMATE_SIMULATOR_ID=' + devices[0]['udid'])
+          PY
+      - name: Build and exercise the local learning loop
+        run: |
+          xcodebuild -project ios/LinguaMate.xcodeproj -scheme LinguaMate \
+            -destination "platform=iOS Simulator,id=$LINGUAMATE_SIMULATOR_ID" \
+            -parallel-testing-enabled NO -resultBundlePath "$RUNNER_TEMP/LinguaMate.xcresult" \
+            CODE_SIGNING_ALLOWED=NO test
+      - name: Save simulator test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-test-results
+          path: ${{ runner.temp }}/LinguaMate.xcresult
+          if-no-files-found: ignore
+      - name: Export actual simulator screenshots
+        if: always()
+        run: |
+          if [ -d "$RUNNER_TEMP/LinguaMate.xcresult" ]; then
+            xcrun xcresulttool export attachments --path "$RUNNER_TEMP/LinguaMate.xcresult" --output-path "$RUNNER_TEMP/LinguaMate-demo"
+          fi
+      - name: Save visual demo
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-demo-screenshots
+          path: ${{ runner.temp }}/LinguaMate-demo
+          if-no-files-found: ignore
