@@ -1,0 +1,26 @@
+# Personal pilot. See docs/deploy-render.md before entering secrets in Render.
+services:
+  - type: web
+    name: linguamate-api
+    runtime: docker
+    repo: https://github.com/hildaoo/LinguaMate
+    branch: codex/linguamate-mvp
+    plan: free
+    numInstances: 1
+    autoDeploy: false
+    dockerContext: ./server
+    dockerfilePath: ./server/Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: LLM_BASE_URL
+        value: https://api.deepseek.com/v1
+      - key: LLM_MODEL
+        value: deepseek-flash
+      - key: LLM_API_KEY
+        sync: false
+      - key: LINGUAMATE_CLIENT_TOKEN
+        generateValue: true
+      - key: LINGUAMATE_TOKEN_EXPIRES_AT
+        sync: false
+      - key: LINGUAMATE_DAILY_LIMIT
+        value: "200"

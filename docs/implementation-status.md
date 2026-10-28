@@ -35,6 +35,10 @@
 | iPhone 17 / iOS 27.2 | 用户提供的目标设备；未进行安装、系统兼容性或真机验证 |
 | TestFlight / App Store | 未签名、未上传、未发布 |
 
+最近完成的 [CI（`b989168`）](https://github.com/hildaoo/LinguaMate/actions/runs/40693138241) 已全部通过，包括后端 / Swift 核心和 iOS 模拟器 UI 流程。后续提交的构建状态以对应 CI 为准。
+
+已增加 Docker 部署镜像、Render 免费方案 Blueprint 和公网验收脚本，详见 [部署说明](deploy-render.md)。当前尚未获得托管平台账号授权，也没有已验证的公网服务地址；这些文件不代表部署已经完成。Docker CI 会验证实际镜像的动态端口、健康检查、鉴权和非 root 运行。
+
 云环境已保存 `install_script`、`start_skill`、DeepSeek 地址/模型变量建议、目标为 `api.deepseek.com` 的 `LLM_API_KEY` secret 要求，以及 `api.github.com`、`api.deepseek.com`、`api-docs.deepseek.com` 的网络草稿，保留既有网络预设。保存不会执行脚本、改变当前实例网络、注入密钥或发布快照；需要在环境设置填写密钥、审阅、保存并发布。运行中的后端需要重新启动以读取新配置。
 
 ## 刻意保留到后续的功能

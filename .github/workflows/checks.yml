@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: uv sync --directory server --locked
-      - run: uv run --directory server ruff check app tests
+      - run: uv run --directory server ruff check app tests scripts
       - run: uv run --directory server pytest -q
       - name: Install verified Swift toolchain
         env:
@@ -29,6 +29,15 @@ jobs:
         env:
           LINGUAMATE_TOOLCHAIN_ROOT: ${{ runner.temp }}/swift-toolchains
         run: bash scripts/test-contract.sh
+  backend-container:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build deployable backend
+        run: docker build --tag linguamate-api:deployment-check server
+      - name: Check the container entrypoint and authentication
+        run: python3 scripts/check-container.py
   ios:
     runs-on: macos-15
     timeout-minutes: 30

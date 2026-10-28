@@ -48,6 +48,7 @@ bash scripts/test-contract.sh
 
 - 原生 App：见 [iPhone / macOS / TestFlight 运行说明](docs/setup-ios.md)。你没有 Mac 时，可使用借用/租用 Mac 或 macOS CI；Linux 不能完成 iOS SDK 编译和签名。
 - 真实 AI：见 [服务端配置](docs/setup-server.md)。需要模型 API 密钥、可达的 HTTPS 后端及个人短期访问令牌。不要把供应商密钥放入 iOS 或提交到 Git。
+- 公网部署：已准备 [Render 免费试用部署步骤](docs/deploy-render.md) 和 `render.yaml`，需在 Render 连接 GitHub 并填写服务端密钥；配置文件就绪不代表服务已经上线。
 - 已实现与未验证事项：见 [实现状态](docs/implementation-status.md)。
 - 产品规划：见 [第一阶段设计](docs/phase-1-product-and-architecture.md)。设计描述中的后续功能不代表已实现。
 
