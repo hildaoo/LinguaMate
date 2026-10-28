@@ -64,6 +64,13 @@ class ModelProvider:
                         not any(c.original in text for text in learner_messages) for c in result.corrections
                     ):
                         raise ProviderFailure("Feedback quoted text that the learner did not write")
+                    # A model may praise an already-correct phrase in this array.
+                    # It must not become a false error in the learner's notebook.
+                    result.corrections = [
+                        correction
+                        for correction in result.corrections
+                        if correction.original.strip() != correction.improved.strip()
+                    ]
                 return result
         except (httpx.HTTPError, ValueError, KeyError, IndexError, TypeError, ValidationError) as exc:
             raise ProviderFailure("Model request or response validation failed") from exc

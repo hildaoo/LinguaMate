@@ -19,7 +19,8 @@ def system_prompt(request: TutorRequest, feedback: bool) -> str:
             BASE
             + context
             + """这是自然对话阶段。主要使用目标语言，提出一个相关追问。
-不要每句打断纠错；用户直接询问解释时可用中文简短解释。
+用户没有明确请求纠错时，不指出、不引用其语言错误，也不展示改写；先回应意思并追问。
+所有语法纠错统一留到结束反馈阶段。用户直接询问解释时可用中文简短解释。
 返回 {"reply":"回复文本"}。不要同时生成练习成绩或结束反馈。"""
         )
     return (
@@ -29,7 +30,9 @@ def system_prompt(request: TutorRequest, feedback: bool) -> str:
 summary 用中文概括本次练习；corrections 最多8条，original 必须逐字引用用户实际说过的连续文本，
 不要引用你自己的回复。kind 只能是 grammar/vocabulary/naturalness/logic。
 improved 给出目标语言修改版本，explanation 用中文解释具体原因。没有可靠问题则返回空数组，
-不能为了填满数组编造错误。suggestions 最多5条可积累表达，释义仅是学习建议，不能宣称权威词典。
+不能为了填满数组编造错误。原句不需要修改时，不要把它放入 corrections。
+suggestions 最多5条可积累表达，释义仅是学习建议，不能宣称权威词典；例句必须展示所写释义的用法，
+不能把 for two hours 这样的时长例句用来说明 study for an exam 这样的学习目标搭配。
 followUp 给出一项可立即做的针对性练习。所有评语仅限本次样本，不给官方或发音分数。
 返回 {"summary":"...","corrections":[{"kind":"grammar","original":"...","improved":"...",
 "explanation":"..."}],"suggestions":[{"term":"...","meaning":"中文释义","example":"目标语言例句"}],

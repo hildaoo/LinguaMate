@@ -319,3 +319,29 @@ async def test_incomplete_model_completion_is_rejected_even_with_valid_json(fini
     provider = ModelProvider(settings(llm_base_url="https://api.deepseek.com/v1"), transport)
     with pytest.raises(ProviderFailure):
         await provider.generate(TutorRequest.model_validate(payload()), feedback=False)
+
+
+async def test_unchanged_phrases_are_not_recorded_as_errors():
+    feedback = {
+        "summary": "这是可以接受的表达。",
+        "corrections": [
+            {"kind": "naturalness", "original": "I agree", "improved": "I agree", "explanation": "不需要修改"}
+        ],
+        "suggestions": [],
+        "followUp": "请补充一个例子。",
+    }
+    request_body = payload(feedback=True)
+    request_body["messages"][0]["content"] = "I agree"
+    transport = httpx.MockTransport(
+        lambda request: httpx.Response(
+            200,
+            json={
+                "choices": [{"finish_reason": "stop", "message": {"content": json.dumps(feedback)}}],
+            },
+        )
+    )
+    result = await ModelProvider(settings(), transport).generate(
+        TutorRequest.model_validate(request_body),
+        feedback=True,
+    )
+    assert result.corrections == []

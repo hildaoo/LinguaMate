@@ -2,9 +2,11 @@
 
 面向英语与韩语学习的原生 iPhone App。当前实现聚焦：独立学习空间 → 文字练习与纠错 → 词汇复习 → 专项判分 → 学习记录。
 
-**状态：已实现首版客户端、核心与后端；核心/接口测试和真实 DeepSeek 英韩回复/纠错已通过。iOS 构建、真机安装尚待验证，不能视为已经发布的 App。**
+**状态：首版 iOS 模拟器构建和学习流程 UI 测试已通过；核心/接口测试及真实 DeepSeek 英韩回复/纠错也已通过。尚未完成真机签名或 TestFlight 分发。**
 
 可阅读 [真实 AI 对话 Demo](docs/demo-ai.md)：使用开发者编写的样例，实际调用 `deepseek-flash`，不是固定回复或 iPhone 运行截图。
+
+可从 [已通过的 macOS CI](https://github.com/hildaoo/LinguaMate/actions/runs/40691035492) 下载 `ios-demo-screenshots`，查看原生 App 实际运行截图；`ios-test-results` 包含完整测试结果。截图展示本地规则练习和学习闭环，不冒充已经完成原生端的云 AI 集成验收。
 
 ## 功能范围
 
@@ -18,7 +20,7 @@
 
 | 位置 | 内容 |
 | --- | --- |
-| `ios/LinguaMate.xcodeproj` | 可用 Xcode 打开的 App 工程，未在当前环境执行 iOS 编译 |
+| `ios/LinguaMate.xcodeproj` | 已在 macOS CI 通过模拟器构建与 UI 测试的 App 工程 |
 | `ios/project.yml` | XcodeGen 2.44.1 工程声明 |
 | `ios/LinguaMate/` | SwiftUI 页面、AppStore 和 Keychain |
 | `Sources/LinguaMateCore/` | 可在 Linux / macOS 测试的 Swift 核心 |

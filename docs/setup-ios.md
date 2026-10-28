@@ -6,7 +6,7 @@
 
 - `Sources/LinguaMateCore`：跨平台 Swift 核心，包含独立语言空间、复习调度、判分、反馈记录、数据持久化与 HTTP 客户端。
 - `server`：真实 FastAPI 服务，支持 OpenAI 兼容的文本模型接口；没有密钥时明确不可用。
-- `ios/LinguaMate.xcodeproj`：已由 XcodeGen 2.44.1 实际生成，包含 SwiftUI App、资源和 UI 测试。当前 Linux 只做过语法解析，不能完成 SwiftUI 类型检查、SDK 编译或运行模拟器。
+- `ios/LinguaMate.xcodeproj`：已由 XcodeGen 2.44.1 实际生成，包含 SwiftUI App、资源和 UI 测试。Linux 不能执行 iOS SDK 编译，但已通过 GitHub 的 macOS runner 实际完成模拟器构建和学习流程 UI 测试。
 - 本地规则模式无需后端；这不是 AI。其固定追问和少量纠错只作练习，界面会持续标注。
 
 ## 路径一：借用 / 租用 Mac
@@ -31,7 +31,9 @@ xcodebuild -list -project ios/LinguaMate.xcodeproj
 
 仓库包含 `.github/workflows/checks.yml`。提交到 GitHub 后，PR / main push 可触发；也支持手动运行。macOS job 会生成工程、选择已安装的 iPhone 模拟器，然后执行构建和完整本地学习流程的 UI 测试；失败时保留 `.xcresult`。
 
-当前环境的 GitHub API 请求返回 Forbidden，无法从这里查询/触发 Actions。Git 读取正常，不代表 Actions 权限或 macOS 额度已验证。环境网络配置需要允许 `api.github.com` 才能进一步排查 API；用户还需拥有相应仓库权限及可用 runner 额度。本次未推送分支、未触发 Actions。
+GitHub 网络权限恢复后，代码已推送到 `codex/linguamate-mvp` 并创建 [草稿 PR #1](https://github.com/hildaoo/LinguaMate/pull/1)。[首次完整 CI](https://github.com/hildaoo/LinguaMate/actions/runs/40691035492) 在提交 `8815fd9` 上通过了 backend-and-core 与 ios 两个 job，包括原生构建和 UI 测试。后续修改以各自提交的检查为准。
+
+该运行的附件 `ios-demo-screenshots` 包含真实模拟器截图（约 2 MB），`ios-test-results` 包含 `.xcresult`。当前执行环境下载附件的存储域名 `productionresultssa16.blob.core.windows.net` 仍被网络策略拦截，可先在 GitHub 的运行页面下载。截图来自原生测试中的本地学习流程，不能作为真机或原生端云 AI 全链路的完成证明。
 
 CI 的模拟器构建关闭签名，**生成的测试产物不能直接安装到 iPhone**。TestFlight 还需要：
 
@@ -54,4 +56,4 @@ CI 的模拟器构建关闭签名，**生成的测试产物不能直接安装到
 - 清除会话或删除全部数据后，相应记录与派生统计清除。
 - 大字号、VoiceOver、浅色/深色、键盘遮挡和 iPhone 安全区域均需实机检查。
 
-这些真机与 UI 项目在当前 Linux 环境尚未执行；不得用核心单元测试替代它们。
+自动化已在 macOS 模拟器覆盖引导、对话结束反馈、词汇复习、专项判分、重启持久化和语言隔离。上面的真机、云端连接、权限、删除、VoiceOver 和大字号等其余项目仍需分别验收，不能用一次 UI 测试代替全部检查。

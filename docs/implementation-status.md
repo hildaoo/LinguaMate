@@ -26,12 +26,12 @@
 | --- | --- |
 | Swift 核心编译与单元测试 | Linux Swift 6.0.3：14 项核心测试通过，包含英韩完整学习流程保存/重载 |
 | Swift → FastAPI HTTP 合约 | 1 项双语 HTTP 合约测试通过；Swift 总计 15 项、0 失败、0 跳过，供应商使用测试替身 |
-| 后端 API / provider 适配器测试 | 25 项通过，覆盖 DeepSeek 请求/反馈兼容、空输出、截断、错误、权限、配额与数据校验；Ruff 检查通过 |
+| 后端 API / provider 适配器测试 | 26 项本地测试通过，覆盖 DeepSeek 请求/反馈兼容、空输出、截断、虚假无修改纠错、权限、配额与数据校验；Ruff 检查通过 |
 | 后端启动与未配置状态 | 实际请求 `/health` 和对话接口，未配置返回 503 |
 | Xcode 工程生成 | 使用源码构建的 XcodeGen 2.44.1 实际生成 |
-| SwiftUI 源文件语法 | Linux 编译器完成解析；不等于 iOS 类型检查或 SDK 编译 |
-| iOS UI 测试 | 已提供，当前没有 macOS / iOS SDK，未执行 |
-| 真实 AI 对话 | DeepSeek 模型列表请求成功；`deepseek-flash` 的英韩回复与结构化反馈共 4 次真实调用通过 |
+| SwiftUI / iOS 构建 | macOS CI 已实际完成 iOS 模拟器编译，首次通过提交为 `8815fd9` |
+| iOS UI 测试 | 同一 CI 中通过本地学习闭环测试，产出 `ios-demo-screenshots` 和 `.xcresult` |
+| 真实 AI 对话 | DeepSeek 模型列表请求成功；英韩回复与反馈通过。提示词/无修改纠错过滤优化后再次通过，共两轮 8 次真实模型调用 |
 | iPhone 17 / iOS 27.2 | 用户提供的目标设备；未进行安装、系统兼容性或真机验证 |
 | TestFlight / App Store | 未签名、未上传、未发布 |
 
@@ -43,4 +43,4 @@
 
 ## 下一步
 
-首先在 macOS 跑通现有 App 构建和 UI 测试，修复实际发现的问题；再配置个人后端令牌与可达 HTTPS 服务完成 App 到模型的整条链路验收；最后配置签名，向用户的 iPhone 分发测试版。模型后端已真实调用通过，核心测试不能代替原生页面与真机验证。
+macOS 构建和本地学习流程 UI 测试已经通过。接下来配置个人后端令牌与可达 HTTPS 服务，完成 App 到模型的整条链路验收，再配置签名并向用户的 iPhone 分发 TestFlight 测试版。
