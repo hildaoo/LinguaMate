@@ -9,6 +9,12 @@
 - `ios/LinguaMate.xcodeproj`：已由 XcodeGen 2.44.1 实际生成，包含 SwiftUI App、资源和 UI 测试。Linux 不能执行 iOS SDK 编译，但已通过 GitHub 的 macOS runner 实际完成模拟器构建和学习流程 UI 测试。
 - 本地规则模式无需后端；这不是 AI。其固定追问和少量纠错只作练习，界面会持续标注。
 
+## 路径零：Windows + 普通 Apple 账号免费自用
+
+macOS CI 在模拟器测试后执行 `scripts/build-ios-ipa.sh`，编译真正的 iPhoneOS / arm64 Release 包，并将待签名的 `.ipa`、安装说明、SHA-256 和构建信息上传为 `LinguaMate-unsigned-ipa` 附件。无需在 GitHub 配置 Apple 凭据。用户在自己的 Windows 电脑使用自己的账号签名安装，见 [逐步安装说明](install-windows.md)。普通账号签名有 7 天有效期，可通过安装工具在电脑可连接手机时自动刷新；这与后端令牌的长期有效无关。
+
+此方式使用第三方安装工具，不属于 TestFlight 或 App Store 分发。CI 打包成功后还需用户在自己的手机完成签名安装和真机验收。
+
 ## 路径一：借用 / 租用 Mac
 
 1. 在 Mac 上安装支持目标设备系统的 Xcode；完成 Xcode 首次启动和 iOS 平台组件安装。

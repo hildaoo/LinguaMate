@@ -87,3 +87,12 @@ jobs:
           name: ios-demo-screenshots
           path: ${{ runner.temp }}/LinguaMate-demo
           if-no-files-found: ignore
+      - name: Build an unsigned iPhone IPA for personal testing
+        run: bash scripts/build-ios-ipa.sh "$RUNNER_TEMP/LinguaMate-ipa"
+      - name: Save the personal testing package
+        uses: actions/upload-artifact@v4
+        with:
+          name: LinguaMate-unsigned-ipa
+          path: ${{ runner.temp }}/LinguaMate-ipa
+          if-no-files-found: error
+          retention-days: 30

@@ -47,6 +47,7 @@ bash scripts/test-contract.sh
 ## 开始运行
 
 - 原生 App：见 [iPhone / macOS / TestFlight 运行说明](docs/setup-ios.md)。你没有 Mac 时，可使用借用/租用 Mac 或 macOS CI；Linux 不能完成 iOS SDK 编译和签名。
+- Windows 免费自用：从 CI 下载 `LinguaMate-unsigned-ipa`，按 [安装说明](docs/install-windows.md) 用普通 Apple 账号在自己的电脑签名安装；无需向 CI 提供 Apple 凭据。
 - 真实 AI：见 [服务端配置](docs/setup-server.md)。需要模型 API 密钥、可达的 HTTPS 后端及个人访问令牌；个人令牌一次配置即可使用，无需设置到期时间或定期续期。不要把供应商密钥放入 iOS 或提交到 Git。
 - 公网部署：已准备 [Render 免费试用部署步骤](docs/deploy-render.md) 和 `render.yaml`，需在 Render 连接 GitHub 并填写服务端密钥；配置文件就绪不代表服务已经上线。
 - 已实现与未验证事项：见 [实现状态](docs/implementation-status.md)。

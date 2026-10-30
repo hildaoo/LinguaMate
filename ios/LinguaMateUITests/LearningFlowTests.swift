@@ -8,6 +8,7 @@ final class LearningFlowTests: XCTestCase {
         app.launch()
         let onboarding = app.buttons["finishOnboarding"]
         XCTAssertTrue(onboarding.waitForExistence(timeout: 10))
+        capture(app, name: "00-Onboarding")
         for _ in 0..<6 where !onboarding.isHittable { app.swipeUp() }
         onboarding.tap()
         capture(app, name: "01-English-home")
@@ -25,6 +26,7 @@ final class LearningFlowTests: XCTestCase {
         capture(app, name: "02-Local-conversation-feedback")
 
         app.tabBars.buttons["学习"].tap()
+        capture(app, name: "03a-Vocabulary-list")
         app.buttons["startReview"].tap()
         app.buttons["revealWord"].tap()
         capture(app, name: "03-Vocabulary-review")
@@ -32,6 +34,7 @@ final class LearningFlowTests: XCTestCase {
         app.navigationBars.buttons["完成"].tap()
 
         app.tabBars.buttons["练习"].tap()
+        capture(app, name: "04a-Practice-list")
         app.buttons["practice-en-ielts-gardens-v1"].tap()
         for id in ["answer-gardens-1-1", "answer-gardens-2-0", "answer-gardens-3-2"] {
             let button = app.buttons[id]
@@ -52,6 +55,8 @@ final class LearningFlowTests: XCTestCase {
         app.segmentedControls["languagePicker"].buttons.element(boundBy: 1).tap()
         XCTAssertFalse(app.staticTexts["最近专项 · 城市花园与社区"].exists)
         capture(app, name: "05-Korean-home")
+        app.tabBars.buttons["我的"].tap()
+        capture(app, name: "06-Profile-and-AI-settings")
     }
 
     @MainActor
