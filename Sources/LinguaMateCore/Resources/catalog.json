@@ -1,0 +1,54 @@
+{
+  "words": [
+    {"language":"en","term":"evidence","meaning":"证据；支持观点的信息","example":"We need more evidence to support this conclusion."},
+    {"language":"en","term":"sustainable","meaning":"可持续的","example":"The city is investing in sustainable transport."},
+    {"language":"en","term":"whereas","meaning":"然而；而（用于对比）","example":"I prefer reading, whereas my sister enjoys podcasts."},
+    {"language":"en","term":"allocate","meaning":"分配（时间、资金等）","example":"I allocate thirty minutes a day to language practice."},
+    {"language":"en","term":"perspective","meaning":"观点；观察问题的角度","example":"The discussion helped me see a different perspective."},
+    {"language":"en","term":"take into account","meaning":"考虑到","example":"We should take the cost into account."},
+    {"language":"ko","term":"근거","meaning":"依据；根据","example":"자신의 의견을 뒷받침하는 근거를 제시해 주세요."},
+    {"language":"ko","term":"꾸준히","meaning":"坚持不懈地；持续地","example":"매일 꾸준히 한국어를 공부하고 있어요."},
+    {"language":"ko","term":"반면에","meaning":"另一方面；相反（用于对比）","example":"이 방법은 편리한 반면에 비용이 많이 들어요."},
+    {"language":"ko","term":"영향을 미치다","meaning":"产生影响","example":"수면은 학습 능력에 영향을 미쳐요."},
+    {"language":"ko","term":"해결하다","meaning":"解决","example":"친구와 함께 문제를 해결했어요."},
+    {"language":"ko","term":"환경","meaning":"环境","example":"조용한 환경에서 공부하는 것을 좋아해요."}
+  ],
+  "practices": [
+    {
+      "id":"en-ielts-gardens-v1","language":"en","exam":"IELTS","title":"城市花园与社区","difficulty":"中级阅读","source":"LinguaMate 原创专项 v1 · 非官方真题，不对应官方题量或分数",
+      "passage":"A city council turned several unused sites into community gardens. Volunteers grow vegetables and share practical skills. A survey found that participants felt more connected to their neighbours. However, the survey included only people who already used the gardens. Researchers therefore warned that the results might not represent all residents. The council plans to interview non-participants before deciding whether to expand the programme.",
+      "questions":[
+        {"id":"gardens-1","prompt":"What benefit did participants report?","options":["Lower rent","Stronger connections with neighbours","Shorter working hours"],"correctIndex":1,"explanation":"原文 felt more connected to their neighbours 对应 B。租金和工作时长均未提及。"},
+        {"id":"gardens-2","prompt":"Why should the survey results be treated cautiously?","options":["Only garden users were surveyed","No vegetables were grown","The council rejected the survey"],"correctIndex":0,"explanation":"样本只包含已经使用花园的人，可能有选择偏差。B 与种菜的描述矛盾；C 没有依据。"},
+        {"id":"gardens-3","prompt":"What will the council do before deciding on expansion?","options":["Close all the gardens","Increase every resident's rent","Interview people who do not use the gardens"],"correctIndex":2,"explanation":"最后一句明确说先访问 non-participants。关闭花园和提高租金都不在计划中。"}
+      ]
+    },
+    {
+      "id":"en-cet-library-v1","language":"en","exam":"CET-6","title":"校园图书馆的新安排","difficulty":"基础至中级阅读","source":"LinguaMate 原创专项 v1 · 非官方真题，不换算六级成绩",
+      "passage":"The university library will keep its ground floor open until midnight during the examination period. The upper floors will still close at nine. Students must bring their university cards to enter after eight in the evening. The change is a trial: staff will record how many students use the extra hours and collect feedback. A permanent extension will depend on both demand and staffing costs.",
+      "questions":[
+        {"id":"library-1","prompt":"Which area will remain open until midnight?","options":["Every floor","Only the upper floors","The ground floor"],"correctIndex":2,"explanation":"第一句限定 ground floor；上层仍在九点关闭，所以 A、B 不成立。"},
+        {"id":"library-2","prompt":"What is needed to enter after 8 p.m.?","options":["A university card","A printed examination result","A reservation fee"],"correctIndex":0,"explanation":"university cards 是明确要求；成绩单和预约费没有提及。"},
+        {"id":"library-3","prompt":"What determines whether the change becomes permanent?","options":["Only student demand","Demand and staffing costs","Only the number of books"],"correctIndex":1,"explanation":"both demand and staffing costs 表示两个因素。A 漏掉人员成本，C 与原文无关。"}
+      ]
+    },
+    {
+      "id":"ko-topik1-cafe-v1","language":"ko","exam":"TOPIK I","title":"周末的咖啡馆","difficulty":"基础阅读","source":"LinguaMate 原创专项 v1 · 非官方真题，不推断 TOPIK 等级",
+      "passage":"저는 토요일마다 집 근처 카페에 갑니다. 그곳은 조용해서 책을 읽기 좋습니다. 지난주에는 친구와 함께 갔습니다. 저는 차를 마시고 친구는 커피를 마셨습니다. 우리는 두 시간 동안 책을 읽었습니다. 다음 주에는 도서관에 가려고 합니다.",
+      "questions":[
+        {"id":"cafe-1","prompt":"이 사람은 왜 그 카페를 좋아합니까?","options":["집에서 멀어서","조용해서 책을 읽기 좋아서","커피가 무료라서"],"correctIndex":1,"explanation":"第二句说明咖啡馆安静，适合读书。第一句说在家附近，所以 A 不对；原文没说免费。"},
+        {"id":"cafe-2","prompt":"지난주에 이 사람은 무엇을 마셨습니까?","options":["커피","우유","차"],"correctIndex":2,"explanation":"저는 차를 마시고 表示本人喝茶；喝咖啡的是朋友；没有提到牛奶。"},
+        {"id":"cafe-3","prompt":"다음 주에는 어디에 가려고 합니까?","options":["도서관","학교 식당","친구 집"],"correctIndex":0,"explanation":"最后一句 도서관에 가려고 합니다 表示打算去图书馆。学校食堂和朋友家均未提及。"}
+      ]
+    },
+    {
+      "id":"ko-topik2-remote-v1","language":"ko","exam":"TOPIK II","title":"远程办公的两面性","difficulty":"中高级阅读","source":"LinguaMate 原创专项 v1 · 非官方真题，不换算 TOPIK 总分",
+      "passage":"재택근무는 출퇴근 시간을 줄이고 일정을 유연하게 조정할 수 있다는 장점이 있다. 반면 동료와 직접 대화할 기회가 줄어 의사소통에 어려움을 겪기도 한다. 따라서 재택근무의 효과를 높이려면 업무의 특성을 고려해야 한다. 모든 업무에 같은 방식을 적용하기보다는 집중이 필요한 업무는 집에서, 협력이 중요한 업무는 사무실에서 수행하는 방안을 검토할 필요가 있다.",
+      "questions":[
+        {"id":"remote-1","prompt":"글에서 언급한 재택근무의 장점은 무엇입니까?","options":["모든 갈등이 사라진다","출퇴근 시간을 줄일 수 있다","동료를 더 자주 직접 만난다"],"correctIndex":1,"explanation":"第一句说明减少通勤时间。所有冲突消失是过度推断；直接见同事的机会反而减少。"},
+        {"id":"remote-2","prompt":"'반면'은 앞뒤 내용 사이의 어떤 관계를 나타냅니까?","options":["대조","시간 순서","예시"],"correctIndex":0,"explanation":"前文谈优点，后文谈沟通困难，形成对比。不是时间顺序，也不是举例。"},
+        {"id":"remote-3","prompt":"필자가 제안하는 방법은 무엇입니까?","options":["모든 업무를 집에서 수행한다","재택근무를 완전히 금지한다","업무의 특성에 따라 근무 장소를 정한다"],"correctIndex":2,"explanation":"作者建议根据工作特点决定地点：需要专注的在家，需要合作的在办公室。A、B 都是原文未支持的绝对化方案。"}
+      ]
+    }
+  ]
+}
