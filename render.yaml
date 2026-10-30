@@ -20,7 +20,5 @@ services:
         sync: false
       - key: LINGUAMATE_CLIENT_TOKEN
         generateValue: true
-      - key: LINGUAMATE_TOKEN_EXPIRES_AT
-        sync: false
       - key: LINGUAMATE_DAILY_LIMIT
         value: "200"

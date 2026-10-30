@@ -6,7 +6,6 @@ import secrets
 import subprocess
 import sys
 import time
-from datetime import UTC, datetime, timedelta
 from urllib.error import HTTPError, URLError
 from urllib.request import ProxyHandler, Request, build_opener
 from uuid import uuid4
@@ -22,10 +21,9 @@ def check(image, configured):
         PORT="10000",  # Exercise the port supplied by a hosting platform.
         LLM_API_KEY="container-test-only-not-a-real-key" if configured else "",
         LINGUAMATE_CLIENT_TOKEN=secrets.token_urlsafe(32) if configured else "",
-        LINGUAMATE_TOKEN_EXPIRES_AT=(datetime.now(UTC) + timedelta(hours=1)).isoformat(),
     )
     arguments = ["run", "--rm", "--detach", "--publish", "127.0.0.1::10000"]
-    for name in ["PORT", "LLM_API_KEY", "LINGUAMATE_CLIENT_TOKEN", "LINGUAMATE_TOKEN_EXPIRES_AT"]:
+    for name in ["PORT", "LLM_API_KEY", "LINGUAMATE_CLIENT_TOKEN"]:
         arguments.extend(["--env", name])
     container = docker(*arguments, image, env=environment)
     try:

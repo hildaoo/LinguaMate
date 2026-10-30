@@ -3,7 +3,7 @@ import hashlib
 import hmac
 import time
 from collections import OrderedDict, deque
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime
 
 from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import JSONResponse
@@ -24,13 +24,7 @@ def create_app(settings: Settings | None = None, provider: ModelProvider | None 
     daily = {"day": datetime.now(UTC).date(), "count": 0}
 
     def auth_ready() -> bool:
-        expiry = settings.linguamate_token_expires_at
-        now = datetime.now(UTC)
-        return bool(
-            len(settings.linguamate_client_token.get_secret_value()) >= 32
-            and expiry
-            and now < expiry <= now + timedelta(days=7)
-        )
+        return len(settings.linguamate_client_token.get_secret_value()) >= 32
 
     @app.middleware("http")
     async def bounded_body(request: Request, call_next):
@@ -56,10 +50,10 @@ def create_app(settings: Settings | None = None, provider: ModelProvider | None 
 
     async def execute(payload: TutorRequest, authorization: str | None, feedback: bool):
         if not auth_ready():
-            raise HTTPException(503, "Private access token and expiry must be configured")
+            raise HTTPException(503, "Private access token must be configured")
         expected = "Bearer " + settings.linguamate_client_token.get_secret_value()
         if authorization is None or not hmac.compare_digest(authorization.encode(), expected.encode()):
-            raise HTTPException(401, "Invalid or expired access token")
+            raise HTTPException(401, "Invalid access token")
         if not settings.model_ready:
             raise HTTPException(503, "Model provider is not configured")
         expected_last_role = "assistant" if feedback else "user"

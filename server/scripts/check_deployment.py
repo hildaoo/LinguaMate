@@ -55,7 +55,7 @@ def check(base_url: str, *, live: bool) -> None:
         require_status(health, 200, "health")
         state = health.json()
         if state.get("status") != "ok" or state.get("aiConfigured") is not True:
-            raise RuntimeError("Service is running but model key/private token/expiry are not ready")
+            raise RuntimeError("Service is running but model key/private token are not ready")
         print("HTTPS health: ready (does not by itself verify the model)", flush=True)
 
         messages = [{"role": "user", "content": "I am agree with my friend."}]

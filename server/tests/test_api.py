@@ -1,6 +1,5 @@
 import asyncio
 import json
-from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
 import httpx
@@ -23,7 +22,6 @@ def settings(**overrides):
                 "llm_api_key": "test-provider-key",
                 "llm_model": "test-model",
                 "linguamate_client_token": TOKEN,
-                "linguamate_token_expires_at": datetime.now(UTC) + timedelta(hours=1),
             }
             | overrides
         ),
@@ -65,7 +63,7 @@ def client(app, token=TOKEN):
 
 
 async def test_health_does_not_claim_ai_without_configuration():
-    async with client(create_app(Settings(_env_file=None))) as c:
+    async with client(create_app(settings(llm_api_key="", linguamate_client_token=""))) as c:
         response = await c.get("/health")
         assert response.status_code == 200
         assert response.json()["aiConfigured"] is False
@@ -93,10 +91,47 @@ async def test_wrong_token_never_calls_model():
         assert provider.calls == 0
 
 
-async def test_expired_and_overlong_token_validity_are_rejected():
-    for expiry in [datetime.now(UTC) - timedelta(seconds=1), datetime.now(UTC) + timedelta(days=8)]:
-        async with client(create_app(settings(linguamate_token_expires_at=expiry), FakeProvider())) as c:
-            assert (await c.post("/v1/tutor/reply", json=payload())).status_code == 503
+@pytest.mark.parametrize("token", ["", "too-short"])
+async def test_missing_or_short_token_never_enables_ai(token):
+    provider = FakeProvider()
+    async with client(create_app(settings(linguamate_client_token=token), provider)) as c:
+        assert (await c.get("/health")).json()["aiConfigured"] is False
+        assert (await c.post("/v1/tutor/reply", json=payload())).status_code == 503
+        assert provider.calls == 0
+
+
+@pytest.mark.parametrize("legacy_expiry", [None, "2000-01-01T00:00:00Z", "", "invalid-old-value"])
+async def test_personal_token_needs_no_expiry_and_survives_restart(monkeypatch, legacy_expiry):
+    if legacy_expiry is None:
+        monkeypatch.delenv("LINGUAMATE_TOKEN_EXPIRES_AT", raising=False)
+    else:
+        monkeypatch.setenv("LINGUAMATE_TOKEN_EXPIRES_AT", legacy_expiry)
+    # Each app is a fresh process-equivalent instance using the same configured token.
+    for _ in range(2):
+        provider = FakeProvider()
+        app = create_app(settings(), provider)
+        async with client(app) as c:
+            assert (await c.get("/health")).json()["aiConfigured"] is True
+            assert (await c.post("/v1/tutor/reply", json=payload())).status_code == 200
+            assert (await c.post("/v1/tutor/feedback", json=payload(feedback=True))).status_code == 200
+            for headers in [{}, {"Authorization": "Bearer wrong"}]:
+                async with httpx.AsyncClient(
+                    transport=httpx.ASGITransport(app=app), base_url="http://test", headers=headers
+                ) as unauthenticated:
+                    assert (await unauthenticated.post("/v1/tutor/reply", json=payload())).status_code == 401
+            assert provider.calls == 2
+
+
+async def test_replacing_personal_token_revokes_the_previous_token():
+    provider = FakeProvider()
+    replacement = "replacement-test-only-token-not-for-deployment"
+    app = create_app(settings(linguamate_client_token=replacement), provider)
+    async with client(app) as c:
+        assert (await c.post("/v1/tutor/reply", json=payload())).status_code == 401
+        assert provider.calls == 0
+    async with client(app, replacement) as c:
+        assert (await c.post("/v1/tutor/reply", json=payload())).status_code == 200
+        assert provider.calls == 1
 
 
 async def test_missing_model_key_fails_explicitly():

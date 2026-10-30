@@ -1,4 +1,3 @@
-from datetime import datetime
 from urllib.parse import urlparse
 
 from pydantic import SecretStr, field_validator
@@ -11,7 +10,6 @@ class Settings(BaseSettings):
     llm_model: str = "deepseek-flash"
     llm_api_key: SecretStr = SecretStr("")
     linguamate_client_token: SecretStr = SecretStr("")
-    linguamate_token_expires_at: datetime | None = None
     linguamate_daily_limit: int = 200
 
     @field_validator("llm_base_url")
@@ -28,13 +26,6 @@ class Settings(BaseSettings):
         ):
             raise ValueError("LLM_BASE_URL must be an HTTPS URL without credentials, query or fragment")
         return value.rstrip("/")
-
-    @field_validator("linguamate_token_expires_at")
-    @classmethod
-    def timezone_required(cls, value: datetime | None) -> datetime | None:
-        if value is not None and value.tzinfo is None:
-            raise ValueError("Token expiry must include a timezone")
-        return value
 
     @field_validator("linguamate_daily_limit")
     @classmethod

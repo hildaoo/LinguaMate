@@ -12,9 +12,8 @@
    | 名称 | 填写内容 |
    | --- | --- |
    | `LLM_API_KEY` | 你在 DeepSeek 开放平台创建的真实 API 密钥。只填 Render 环境变量，不发聊天，不提交到 Git。 |
-   | `LINGUAMATE_TOKEN_EXPIRES_AT` | 带时区的未来时间，最多 7 天。首次建议明天同一时间，例如格式 `YYYY-MM-DDTHH:MM:SS+08:00`。不要直接填这段格式占位符。 |
 
-   `LINGUAMATE_CLIENT_TOKEN` 由 Render 自动生成；模型地址、`deepseek-flash` 和每日 200 次限制已在配置中设置。不要把 DeepSeek 密钥当成 App 的访问令牌。
+   `LINGUAMATE_CLIENT_TOKEN` 由 Render 自动生成，一次配置后持续有效，不需要到期时间或定期续期；模型地址、`deepseek-flash` 和每日 200 次限制已在配置中设置。不要把 DeepSeek 密钥当成 App 的访问令牌。
 
 5. 创建服务并等待部署完成。复制 Render 实际分配的 `https://…onrender.com` 地址；不要自行猜域名。在浏览器打开该地址加 `/health`，应看到 `"status":"ok"`、`"aiConfigured":true`。这只检查配置是否就绪，仍需要一次实际模型请求验收。
 6. 在 Render 的 Environment 页面查看自动生成的 `LINGUAMATE_CLIENT_TOKEN`，保存到自己的密码管理器。App 可安装后，在「我的」填写后端 HTTPS 地址与这个令牌，开启文字上传授权，再选择「云端 AI 教师」。
@@ -23,11 +22,13 @@
 
 Render 免费实例可能休眠，唤醒时首次访问较慢；先访问 `/health` 等待就绪，再从 App 发送对话。免费额度、可用区域及账单条件以 Render 当前控制台为准。DeepSeek 模型调用仍按其 API 账户计费。
 
-## 令牌到期与更新
+## 已部署服务升级与令牌更新
 
-这是个人试用服务，令牌最长有效期 7 天，到期后 AI 接口返回 503，离线学习数据仍在 iPhone。继续使用时，在 Render 中同时更换随机访问令牌和到期时间，保存并重新部署，然后在 App 更新令牌。不要将到期时间设置为很久以后，服务会拒绝这种配置。
+已有服务在 Render 顶部选择 **Manual Deploy → Deploy latest commit**，等待部署完成后使用新行为。保留原有 `LINGUAMATE_CLIENT_TOKEN` 和 `LLM_API_KEY` 即可；不需要重新生成令牌或同步 Blueprint。旧的 `LINGUAMATE_TOKEN_EXPIRES_AT` 已不再读取，即使为空或已经到期也不会阻止新版本运行，可保留或删除。
 
-`/health` 在令牌过期时仍返回 HTTP 200、`aiConfigured: false`，方便区分进程健康与 AI 配置是否可用。平台显示 Live 不等于真实 AI 验收通过。
+个人令牌持续有效，重新部署或重启不会自动轮换它。需要撤销访问时，在 Render 中更换随机访问令牌，保存并重新部署，然后在 App 更新令牌；旧令牌不再被接受。未配置或不足 32 字符的令牌仍会阻止 AI 接口运行，未携带正确令牌的请求仍返回 401。
+
+`/health` 在模型密钥或个人令牌缺失时仍返回 HTTP 200、`aiConfigured: false`，方便区分进程健康与 AI 配置是否可用。平台显示 Live 不等于真实 AI 验收通过。
 
 ## 开发者验证
 
